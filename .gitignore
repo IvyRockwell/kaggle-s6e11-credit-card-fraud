@@ -1,0 +1,22 @@
+# 虚拟环境
+.venv/
+
+# 比赛数据（Kaggle 规则不允许再分发）
+data/
+
+# 过程产物（OOF、图表、日志、大文件）
+outputs/
+
+# 本地备份（历史提交、规则文件等）
+_local/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# 日志与系统文件
+*.log
+.DS_Store
+Thumbs.db

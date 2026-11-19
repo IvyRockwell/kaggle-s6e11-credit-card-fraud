@@ -1,0 +1,4 @@
+level,base_mean_val_auc,treat_mean_val_auc,mean_delta,delta_std_sd,paired_t,positive_folds,base_best_iters,treat_best_iters,mechanism_verdict
+placebo,0.946316,0.946167,-0.000149,0.000352,-0.95,2/5,"[308, 312, 253, 197, 404]","[352, 369, 229, 256, 393]",not evidenced
+weak_0.5pct,0.843431,0.957339,0.113908,0.004601,55.357,5/5,"[152, 189, 214, 203, 297]","[481, 374, 297, 289, 405]",adopt
+medium_1.5pct,0.737043,0.971435,0.234392,0.005532,94.751,5/5,"[121, 184, 118, 217, 114]","[325, 246, 345, 254, 457]",adopt

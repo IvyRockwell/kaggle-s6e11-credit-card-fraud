@@ -1,0 +1,10 @@
+# 核心依赖；精确版本见 requirements-lock.txt
+numpy
+pandas
+scipy
+scikit-learn
+lightgbm
+xgboost
+catboost
+matplotlib
+seaborn
