@@ -99,7 +99,10 @@ def _weighted_auc(y_sorted: np.ndarray, w_sorted: np.ndarray) -> float:
 
 
 def bootstrap_delta(y, p1, p2, n_boot, seed, alpha=0.05):
-    """分层配对 bootstrap：返回 (delta, lo, hi, p_two_sided)。"""
+    """分层配对 bootstrap：返回 (delta_point_estimate, lo, hi, p_two_sided)。
+
+    delta 用原始样本上的 AUC 差（点估计）；bootstrap 只负责给 95% CI 与 p。
+    """
     pos_idx = np.flatnonzero(y == 1)
     neg_idx = np.flatnonzero(y == 0)
     rng = np.random.default_rng(seed)
@@ -119,7 +122,7 @@ def bootstrap_delta(y, p1, p2, n_boot, seed, alpha=0.05):
         aucs = [_weighted_auc(ys, w[order]) for order, ys in prep]
         deltas[b] = aucs[0] - aucs[1]
 
-    delta = float(deltas.mean())
+    delta = float(roc_auc_score(y, p1) - roc_auc_score(y, p2))  # 点估计
     lo, hi = np.percentile(deltas, [100 * alpha / 2, 100 * (1 - alpha / 2)])
     # 双侧 bootstrap p：差值分布中与 0 相反的一侧占比的两倍
     frac = (np.sum(deltas <= 0) + 1) / (n_boot + 1) if delta > 0 else \
