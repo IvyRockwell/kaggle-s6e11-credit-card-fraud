@@ -1,14 +1,13 @@
-"""Artifact checks for the main pipeline (v02 -> v17 -> v18 -> v23).
+"""主链产物校验（v02 -> v17 -> v18 -> v23）。
 
-Run after `python src/run_all.py --through v23`. It re-computes the recorded
-numbers from the OOF files and validates the submission files, then exits
-non-zero if anything disagrees.
+在 `python src/run_all.py --through v23` 之后运行：从 OOF 文件重算记录中的数字、
+校验提交文件格式，任何不一致都以非零码退出。
 
-Checks:
-  1. every OOF / member file has aligned ids, no NaN, probabilities in (0, 1);
-  2. v02, v17, v23 fold-mean and OOF AUC match results/experiment_log.csv;
-  3. v18 can be rebuilt as 0.5 * v17 + 0.5 * depth2 and lands on 0.948114;
-  4. submissions have the right header, row count, id order and value range.
+检查项：
+  1. OOF / 成员文件的 id 对齐、无 NaN、概率落在 (0, 1)；
+  2. v02、v17、v23 的折均值与 OOF AUC 与 results/experiment_log.csv 一致；
+  3. v18 可由 0.5 * v17 + 0.5 * depth2 重建，且落在 0.948114；
+  4. 提交文件的表头、行数、id 顺序与取值范围。
 """
 import re
 import sys
@@ -64,21 +63,21 @@ log = pd.read_csv(config.EXPERIMENT_LOG_SNAPSHOT)
 print(f"experiment_log snapshot: {config.EXPERIMENT_LOG_SNAPSHOT.name}, "
       f"{len(log)} rows")
 
-# ---------- 1. OOF artifacts ----------
+# ---------- 1. OOF 产物 ----------
 print("\nOOF artifacts")
 p02 = load_oof(PROJECT / "outputs" / "v02_oof.csv")
 p17 = load_oof(PROJECT / "outputs" / "v17_oof.csv")
 p23 = load_oof(PROJECT / "outputs" / "v23_oof.csv")
 d2_42 = load_oof(PROJECT / "outputs" / "ensemble" / "d2_seed42_oof.csv", col="d2_oof")
 
-# ---------- 2. v18 rebuilt from its two members ----------
+# ---------- 2. 用两个成员重建 v18 ----------
 if p17 is not None and d2_42 is not None:
     v18 = 0.5 * p17 + 0.5 * d2_42
     got = float(roc_auc_score(y, v18))
     check(abs(got - EXPECTED_V18_OOF) < TOL_V18,
           f"v18 rebuilt from members = {EXPECTED_V18_OOF:.6f}", f"got {got:.6f}")
 
-# ---------- 3. recorded numbers ----------
+# ---------- 3. 记录中的数字 ----------
 print("\nrecorded numbers vs experiment_log.csv")
 for vid, p in (("v02", p02), ("v17", p17), ("v23", p23)):
     if p is None:
@@ -98,7 +97,7 @@ for vid, p in (("v02", p02), ("v17", p17), ("v23", p23)):
           f"{vid} OOF AUC matches log",
           f"{got_oof:.6f} vs {m.group(1) if m else 'n/a'}")
 
-# ---------- 4. submissions ----------
+# ---------- 4. 提交文件 ----------
 print("\nsubmissions")
 SUBMISSIONS = (
     "v17_lgbm_additive_stumps.csv",
