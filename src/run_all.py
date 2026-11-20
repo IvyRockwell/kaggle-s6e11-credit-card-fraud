@@ -56,25 +56,25 @@ def preflight() -> None:
     missing = [p for p in REQUIRED_DATA if not (PROJECT / p).exists()]
     if missing:
         sys.exit(
-            "缺少数据文件：" + ", ".join(missing) +
-            "\n请从 Kaggle 比赛页下载 train.csv / test.csv / "
-            "sample_submission.csv 放到 data/ 下（见 README「复现」）。"
+            "missing data files: " + ", ".join(missing) +
+            "\ndownload train.csv / test.csv / sample_submission.csv from the "
+            "Kaggle competition page and put them under data/ (see README)."
         )
     for rel, ncol in REQUIRED_DATA.items():
         with open(PROJECT / rel, "rb") as f:
             header = f.readline().decode("utf-8").strip().split(",")
         if len(header) != ncol:
-            sys.exit(f"{rel} 列数为 {len(header)}，期望 {ncol}；数据版本不对。")
-        print(f"  [ok] {rel:34s} {ncol} 列")
+            sys.exit(f"{rel} has {len(header)} columns, expected {ncol}; wrong data version.")
+        print(f"  [ok] {rel:34s} {ncol} cols")
 
     try:
         import lightgbm, numpy, pandas, sklearn  # noqa: F401
     except ImportError as e:  # pragma: no cover
-        sys.exit(f"依赖缺失：{e}。先执行 pip install -r requirements-lock.txt")
+        sys.exit(f"missing dependency: {e}. run pip install -r requirements-lock.txt")
 
     for d in ("outputs", "submissions"):
         (PROJECT / d).mkdir(parents=True, exist_ok=True)
-    print("  [ok] 目录就绪（outputs/, submissions/）")
+    print("  [ok] directories ready (outputs/, submissions/)")
 
     # 各阶段脚本以 mode="a" 追加日志且不写表头。全链路若从 v02 起跑
     # （而不是从 v01 起跑），日志首行会是数据行，后续读日志的脚本会解析错。
@@ -86,7 +86,7 @@ def preflight() -> None:
             "timestamp,notes\n",
             encoding="utf-8",
         )
-        print("  [ok] outputs/experiment_log.csv 已建表头")
+        print("  [ok] created header for outputs/experiment_log.csv")
 
     print(f"  [ok] python {sys.version.split()[0]}")
 
@@ -123,13 +123,13 @@ def main() -> None:
 
     for name, script, needs, outs in STAGES:
         if args.skip_existing and all((PROJECT / o).exists() for o in outs):
-            print(f"[skip] {name}: 产物已存在")
+            print(f"[skip] {name}: artifacts already exist")
         else:
             lacking = [p for p in needs if not (PROJECT / p).exists()]
             if lacking:
                 sys.exit(
-                    f"阶段 {name} 缺少上游产物：{lacking}\n"
-                    f"请先运行更早的阶段（阶段不能跳过）。"
+                    f"stage {name} is missing upstream artifacts: {lacking}\n"
+                    f"run the earlier stages first (stages cannot be skipped)."
                 )
             run_stage(name, script)
             check_outputs(outs)
@@ -137,8 +137,8 @@ def main() -> None:
             break
 
     print("\n" + "=" * 72)
-    print(f"全部完成，总耗时 {(time.time() - t_all) / 60:.1f} 分钟")
-    print(f"提交文件：{PROJECT / 'submissions'}")
+    print(f"all done in {(time.time() - t_all) / 60:.1f} min")
+    print(f"submissions: {PROJECT / 'submissions'}")
     print("=" * 72)
 
 

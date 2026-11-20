@@ -98,8 +98,8 @@ gap = mean_train_auc - mean_val_auc
 val_std = float(np.std(val_aucs, ddof=0))
 oof_auc = float(roc_auc_score(y, oof))
 
-print("\n===== v02 四件套（早停） =====")
-print(f"best iterations     : {best_iters}（均值 {np.mean(best_iters):.1f}）")
+print("\n===== v02 summary (early stopping) =====")
+print(f"best iterations     : {best_iters} (mean {np.mean(best_iters):.1f})")
 print(f"mean train AUC      : {mean_train_auc:.6f}")
 print(f"mean validation AUC : {mean_val_auc:.6f}")
 print(f"train - val gap     : {gap:.6f}")
@@ -147,7 +147,7 @@ log_row = pd.DataFrame([{
 }])
 log_row.to_csv(config.EXPERIMENT_LOG_PATH, mode="a", header=False, index=False)
 
-print(f"\n提交文件: {sub_path}")
-print(f"OOF 文件: {oof_path}")
-print(f"实验日志: {config.EXPERIMENT_LOG_PATH}")
-print("v02 完成。")
+print(f"\nsubmission      : {sub_path}")
+print(f"OOF             : {oof_path}")
+print(f"experiment log  : {config.EXPERIMENT_LOG_PATH}")
+print("v02 done.")

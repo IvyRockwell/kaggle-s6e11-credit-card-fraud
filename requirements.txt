@@ -8,3 +8,5 @@ xgboost
 catboost
 matplotlib
 seaborn
+plotly
+graphviz
