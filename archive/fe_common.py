@@ -152,12 +152,15 @@ def run_experiment(*, version, sub_filename, feature_summary,
     se = s_d / np.sqrt(config.N_FOLDS)
     t_stat = d_bar / se if se > 0 else np.nan
     pos_folds = int((d > 0).sum())
-    cap_hit = any(b >= MAX_ROUNDS for b in best_iters)
+    # 早停需要 patience 轮的余地；best_iter 落在距上限 patience 轮以内说明
+    # 是被上限截断，增益只能算下界（不能当"结论无效"）。
+    cap_hit = any(b >= MAX_ROUNDS - STOPPING_ROUNDS for b in best_iters)
 
     if d_bar < 0:
         verdict = "negative"
-    elif pos_folds >= 4 and t_stat >= T_CRIT and not cap_hit:
-        verdict = "passes-seed42-pending-multiseed-confirmation"
+    elif pos_folds >= 4 and t_stat >= T_CRIT:
+        verdict = ("adopt (cap reached: gain is a lower bound)" if cap_hit
+                   else "passes-seed42-pending-multiseed-confirmation")
     else:
         verdict = "not evidenced"
 

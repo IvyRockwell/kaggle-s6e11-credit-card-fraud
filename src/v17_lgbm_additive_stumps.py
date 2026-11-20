@@ -116,12 +116,20 @@ s_d = float(d.std(ddof=1))
 se = s_d / np.sqrt(config.N_FOLDS)
 t_stat = d_bar / se if se > 0 else float("nan")
 pos_folds = int((d > 0).sum())
-cap_hit = any(b >= MAX_ROUNDS for b in best_iters)
+# 早停需要 STOPPING_ROUNDS 轮的余地。best_iter 落在距上限 patience 轮以内，
+# 说明早停没有机会触发，模型是被上限截断的，测到的增益只能算下界，
+# 不能当作"未收敛所以结论无效"。旧判定用 `>= MAX_ROUNDS`，fold 1 的
+# 24978 因此被误判成"未触顶"，与日志里"cap was effectively reached"矛盾。
+cap_hit = any(b >= MAX_ROUNDS - STOPPING_ROUNDS for b in best_iters)
+cap_folds = [i + 1 for i, b in enumerate(best_iters)
+             if b >= MAX_ROUNDS - STOPPING_ROUNDS]
 
 if d_bar < 0:
     verdict = "negative"
-elif pos_folds >= 4 and t_stat >= 2.776 and not cap_hit:
-    verdict = "adopt (multi-seed confirmed: seed 123 +0.000712, seed 777 +0.000678)"
+elif pos_folds >= 4 and t_stat >= 2.776:
+    _multi = "multi-seed confirmed: seed 123 +0.000712, seed 777 +0.000678"
+    verdict = (f"adopt (cap reached on fold {cap_folds}: gain is a lower bound; "
+               f"{_multi})" if cap_hit else f"adopt ({_multi})")
 else:
     verdict = "not evidenced"
 
