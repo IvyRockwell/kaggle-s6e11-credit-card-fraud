@@ -4,7 +4,7 @@ import sys
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import fe_common  # noqa: E402
 
 SRC = ["hours_since_last_txn", "velocity_score", "merchant_risk_score"]

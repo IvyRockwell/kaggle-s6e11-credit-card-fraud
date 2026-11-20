@@ -2,7 +2,7 @@
 from pathlib import Path
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import fe_common  # noqa: E402
 
 if __name__ == "__main__":

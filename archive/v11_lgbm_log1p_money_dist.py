@@ -4,7 +4,7 @@ import sys
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import fe_common  # noqa: E402
 
 SRC = ["amount_usd", "account_balance_usd", "distance_from_home_km"]

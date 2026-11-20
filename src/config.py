@@ -15,6 +15,10 @@ TRAIN_PATH = DATA_DIR / "train.csv"
 TEST_PATH = DATA_DIR / "test.csv"
 SAMPLE_SUBMISSION_PATH = DATA_DIR / "sample_submission.csv"
 
+# 中间产物目录：所有脚本都往这里写 OOF / 图表。在干净的 clone 上
+# （outputs/ 被 .gitignore 排除）必须先建出来，否则第一次 to_csv 就失败。
+OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+
 # ---------- 任务常量 ----------
 ID_COL = "id"
 TARGET = "is_fraud"

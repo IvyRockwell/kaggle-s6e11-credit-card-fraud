@@ -18,6 +18,7 @@ import config  # noqa: E402
 OUT = PROJECT / "outputs" / "seed_average"
 OUT.mkdir(parents=True, exist_ok=True)
 MEMBERS = PROJECT / "outputs" / "ensemble" / "members"
+MEMBERS.mkdir(parents=True, exist_ok=True)
 EPS = 1e-9
 
 train = pd.read_csv(config.TRAIN_PATH)

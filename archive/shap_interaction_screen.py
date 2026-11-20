@@ -8,7 +8,7 @@ from sklearn.model_selection import StratifiedKFold
 from lightgbm import LGBMClassifier, early_stopping
 import shap
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import config  # noqa: E402
 
 # ---------- 读数据，分类列处理（与冻结协议完全一致） ----------

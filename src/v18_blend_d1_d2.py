@@ -160,4 +160,10 @@ print(f"\ncandidate submission -> {sub_path}")
 summary = pd.DataFrame([{k: v for k, v in r.items() if k != "aucs"}
                         for r in rows42 + rows123])
 summary.to_csv(OUT / "blend_results.csv", index=False)
+
+# depth2 的 seed42 OOF 单独落盘：check_family_artifacts.py 依赖它重建 v18，
+# 不写的话产物校验脚本在干净 clone 上必然失败。
+pd.DataFrame({config.ID_COL: train[config.ID_COL],
+              "d2_oof": d2_42["oof"]}).to_csv(
+    OUT / "d2_seed42_oof.csv", index=False)
 print("Done.")
