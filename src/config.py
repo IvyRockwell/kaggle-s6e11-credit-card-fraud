@@ -44,4 +44,7 @@ BOOLEAN_COLS = [
 ]
 
 # ---------- 实验日志 ----------
-EXPERIMENT_LOG_PATH = OUTPUTS_DIR / "experiment_log.csv"
+# 写入：本次运行的日志（中间产物，不纳入版本控制）
+EXPERIMENT_LOG_PATH = OUTPUTS_DIR / "experiment_log_run.csv"
+# 读取：仓库内的历史快照，README 与 docs 引用的就是它
+EXPERIMENT_LOG_SNAPSHOT = PROJECT_DIR / "results" / "experiment_log.csv"

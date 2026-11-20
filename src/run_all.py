@@ -78,7 +78,8 @@ def preflight() -> None:
 
     # 各阶段脚本以 mode="a" 追加日志且不写表头。全链路若从 v02 起跑
     # （而不是从 v01 起跑），日志首行会是数据行，后续读日志的脚本会解析错。
-    log_path = PROJECT / "outputs" / "experiment_log.csv"
+    # 这里是"本次运行"的日志，仓库内的历史快照在 results/experiment_log.csv。
+    log_path = PROJECT / "outputs" / "experiment_log_run.csv"
     if not log_path.exists():
         log_path.write_text(
             "experiment_id,model,feature_summary,n_folds,mean_train_auc,"
@@ -86,7 +87,7 @@ def preflight() -> None:
             "timestamp,notes\n",
             encoding="utf-8",
         )
-        print("  [ok] created header for outputs/experiment_log.csv")
+        print("  [ok] created header for outputs/experiment_log_run.csv")
 
     print(f"  [ok] python {sys.version.split()[0]}")
 

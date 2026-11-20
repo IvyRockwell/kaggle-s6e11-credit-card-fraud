@@ -6,7 +6,7 @@ non-zero if anything disagrees.
 
 Checks:
   1. every OOF / member file has aligned ids, no NaN, probabilities in (0, 1);
-  2. v02, v17, v23 fold-mean and OOF AUC match outputs/experiment_log.csv;
+  2. v02, v17, v23 fold-mean and OOF AUC match results/experiment_log.csv;
   3. v18 can be rebuilt as 0.5 * v17 + 0.5 * depth2 and lands on 0.948114;
   4. submissions have the right header, row count, id order and value range.
 """
@@ -60,8 +60,9 @@ train = pd.read_csv(config.TRAIN_PATH)
 test = pd.read_csv(config.TEST_PATH)
 y = train[config.TARGET].to_numpy()
 
-log = pd.read_csv(config.EXPERIMENT_LOG_PATH)
-print(f"experiment_log rows: {len(log)}; ids={list(log['experiment_id'])}")
+log = pd.read_csv(config.EXPERIMENT_LOG_SNAPSHOT)
+print(f"experiment_log snapshot: {config.EXPERIMENT_LOG_SNAPSHOT.name}, "
+      f"{len(log)} rows")
 
 # ---------- 1. OOF artifacts ----------
 print("\nOOF artifacts")
@@ -83,10 +84,10 @@ for vid, p in (("v02", p02), ("v17", p17), ("v23", p23)):
     if p is None:
         continue
     rows = log[log["experiment_id"] == vid]
-    if len(rows) != 1:
-        print(f"[ skip] {vid}: expected exactly 1 log row, found {len(rows)}")
+    if len(rows) == 0:
+        print(f"[ skip] {vid}: no row in {config.EXPERIMENT_LOG_SNAPSHOT.name}")
         continue
-    row = rows.iloc[0]
+    row = rows.iloc[-1]  # 同一实验重跑过就取最后一次
     got_fold = float(fold_aucs(p, 42).mean())
     check(abs(got_fold - float(row["mean_val_auc"])) < TOL_LOG,
           f"{vid} mean_val_auc matches log",
