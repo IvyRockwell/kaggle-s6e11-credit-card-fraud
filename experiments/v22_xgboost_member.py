@@ -17,8 +17,8 @@ import config  # noqa: E402
 OUT_MEMBERS = PROJECT / "outputs" / "ensemble" / "members"
 OUT_MEMBERS.mkdir(parents=True, exist_ok=True)
 
-# ===== 由 xgboost_curve.py 的预注册规则选定（诊断结果写入） =====
-CHOSEN_DEPTH = 2  # xgboost_curve.py 预注册规则选定（两 seed 均值 0.947568）
+# ===== 由 xgboost_curve.py 的事先登记规则选定（诊断结果写入） =====
+CHOSEN_DEPTH = 2  # xgboost_curve.py 事先登记规则选定（两 seed 均值 0.947568）
 assert CHOSEN_DEPTH in (2, 3, 4), "先跑 xgboost_curve.py 并填入选定 depth"
 
 CAP = 20000

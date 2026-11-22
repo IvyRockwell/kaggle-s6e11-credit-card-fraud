@@ -105,7 +105,7 @@ print("\n===== CatBoost capacity summary (mean_val_auc) =====")
 print(summary.pivot(index="depth", columns="seed", values="mean_val_auc")
       .to_string(float_format=lambda x: f"{x:.6f}"))
 
-# ---------- 预注册选深规则（协议 §5.7 / §5.9） ----------
+# ---------- 事先登记选深规则（协议 §5.7 / §5.9） ----------
 per_depth = summary.groupby("depth")["mean_val_auc"].mean().sort_index()
 best_depth = int(per_depth.idxmax())
 best_val = float(per_depth.max())

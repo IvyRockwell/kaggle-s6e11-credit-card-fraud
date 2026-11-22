@@ -173,7 +173,7 @@ corr.to_csv(OUT / "member_corr.csv")
 print("\nmember Spearman corr (seed42 OOF logits):")
 print(corr.round(4).to_string())
 
-# ---------- 预注册采纳规则 ----------
+# ---------- 事先登记采纳规则 ----------
 def qualifies(cand):
     stats = {s: dict(zip(("d_bar", "s_d", "t", "pos"),
                          paired(evaluations[s]["aucs"][cand],

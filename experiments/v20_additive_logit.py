@@ -25,8 +25,8 @@ warnings.filterwarnings("ignore", category=UserWarning)
 OUT_MEMBERS = PROJECT / "outputs" / "ensemble" / "members"
 OUT_MEMBERS.mkdir(parents=True, exist_ok=True)
 
-# ===== 由 additive_logit_grid.py 的预注册规则选定（由编码网格确定） =====
-CHOSEN_ENCODING = "S32"  # additive_logit_grid.py 预注册规则选定（简约带内取参数更少者）
+# ===== 由 additive_logit_grid.py 的事先登记规则选定（由编码网格确定） =====
+CHOSEN_ENCODING = "S32"  # additive_logit_grid.py 事先登记规则选定（简约带内取参数更少者）
 assert CHOSEN_ENCODING in ("B64", "S16", "S32"), \
     "先跑 additive_logit_grid.py 并填入选中编码"
 PRIMARY_C = 0.1

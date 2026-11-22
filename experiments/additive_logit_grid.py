@@ -137,7 +137,7 @@ for enc in ENCODINGS:
           f"({row['secs']:.0f}s)", flush=True)
 
 grid = pd.DataFrame([r for r in summary_rows if r["seed"] == 42])
-# 预注册选择：mean_val_auc 最高；差距 <0.0003 取参数更少者
+# 事先登记选择：mean_val_auc 最高；差距 <0.0003 取参数更少者
 grid = grid.sort_values(["mean_val_auc"], ascending=False,
                         key=lambda s: s.round(6))
 best_val = float(grid["mean_val_auc"].max())
